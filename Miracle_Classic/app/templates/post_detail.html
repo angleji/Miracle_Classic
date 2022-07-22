@@ -1,0 +1,92 @@
+{% extends 'base.html' %} {% block container %}
+<div class="content-container">
+    <h2>{{post.title}}</h2>
+    <a href="{% url 'book_detail' post.book.pk %}">{{post.book.title}}</a>
+    <p><a href="{% url 'user_profile' post.user.username %}">{{post.user.username}}</a> | {{post.uploaded}}</p>
+    <p>{{post.content}}</p>
+</div>
+<button id="like" onclick="like()">좋아요</button> <span id="like-count">{{post.likes.count}}</span> 개
+
+{% if user.is_authenticated and user.pk == post.user.pk %}
+<div class="button-bar">
+    <div class="button-item">
+        <a href="{% url 'post_edit' post.pk %}">수정하기</a>
+        <a href="{% url 'post_delete' post.pk %}">삭제하기</a>
+    </div>
+</div>
+{% endif %}
+
+<div class="comments-container">
+    <p>{{post.comments_count}}</p>
+    <div id="comment-input">
+        <form method="post" action="{% url 'comment_add' post.pk %}">
+            {% csrf_token %}
+            <textarea name="content" id="content" required></textarea>
+            <button type="submit">입력</button>
+        </form>
+    </div>
+    {% for comment in post.comments.all %}
+        <div class="comment-item">
+            <a href="{% url 'user_profile' comment.user.username %}">{{comment.user.username}}</a>
+            <p>{{comment.content}}</p>
+            <p>{{comment.uploaded}}</p>
+            {% if user.is_authenticated and user.username == comment.user.username %}
+            <a href="{% url 'comment_delete' comment.pk %}">삭제</a>
+            {% endif %}
+        </div>
+        
+        {% for recomment in comment.recomments.all %}
+        <div class="recomment-item">
+            <a href="{% url 'user_profile' recomment.user.username %}">{{recomment.user.username}}</a>
+            <p>{{recomment.content}}</p>
+            <p>{{recomment.uploaded}}</p>
+            {% if user.is_authenticated and user.username == recomment.user.username %}
+            <a href="{% url 'recomment_delete' recomment.pk %}">삭제</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <button id="recomment-btn" onclick="enableInput()">답글달기</button>
+        <div id="recomment-input" hidden>
+            <form method="post" action="{% url 'recomment_add' post.pk comment.pk %}">
+                {% csrf_token %}
+                <textarea name="content"></textarea>
+                <button type="submit">입력</button>
+                <button type="button" onclick="disableInput()">취소</button>
+            </form>
+        </div>
+    {% endfor %}
+</div>
+
+<script>
+    const enableInput = async () => {
+        document.getElementById('recomment-btn').hidden = true;
+        document.getElementById('recomment-input').hidden = false;
+    }
+
+    const disableInput = async () => {
+        document.getElementById('recomment-btn').hidden = false;
+        document.getElementById('recomment-input').hidden = true;
+
+    }
+
+
+    
+    const like = async () => {
+        if(!"{{user.username}}"){
+            if (confirm('로그인이 필요합니다. 로그인 창으로 이동할까요?'))
+                window.location = '/registration/login';
+            return;
+        }
+        const response = await axios.post('/post_like', {post_pk:"{{post.pk}}"});
+        if (response.data.is_like){
+            document.getElementById('like').style.color = 'red';
+        } else{
+            document.getElementById('like').style.color = 'black';     
+        }
+
+        document.getElementById('like-count').innerHTML = response.data.likes_count;
+    }
+
+
+</script>
+{% endblock container%}

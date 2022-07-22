@@ -1,0 +1,17 @@
+<div class="post-container">
+    <a href="{% url 'post_detail' post.pk %}">
+        <div class="main-info">
+            <h3 class="title">{{post.title}}</h3>
+            <p class="book">{{post.book.title}}</p>
+            <p class="content">{{post.content}}</p>
+            <p class="uploaded">{{post.uploaded}}</p>
+        </div>
+    </a>
+    <div class="sub-info">
+        <span class="writer">{{post.user.username}}</span>
+        <div class="">
+            댓글 <span> {{post.comments_count}}</span> 개
+            <span>좋아요 {{post.likes.count}} 개</span>
+        </div>
+    </div>
+</div>

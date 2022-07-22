@@ -1,0 +1,13 @@
+<div class="book-container">    
+    <a href="{% url 'book_detail' book.pk %}">
+        <div class="main-info">
+            <h3 class="title">{{book.title}}</h3>
+            <p class="author">{{book.author}}</p>
+            <p class="topic">{{book.topic}}</p>
+        </div>
+    </a>
+    <div class="sub-info">
+        <p>저장 {{book.scraps.count}}</p>
+        <p>토론 {{book.posts.count}}</p>
+    </div>
+</div>

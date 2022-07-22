@@ -1,0 +1,41 @@
+{% extends 'base.html' %} {% block container %}
+<div class="book-container">
+    <h1>{{book.title}}</h1>
+</div>
+
+<button id="scrap" onclick="scrap()">스크랩</button>
+<span id="scrap-cnt">{{book.scraps.count}}</span> 회
+
+<div class="post-list">
+    {% for post in book.posts.all %}
+    {% include 'post_container.html' %}
+    {% endfor %}
+
+    {% if book.posts.count == 0 %}
+    <p>아직 글이 없습니다</p>
+    {% endif %}
+
+    <a href="{% url 'post_add' book.pk %}">
+        <button>글쓰기</button>
+    </a>
+</div>
+
+<script>
+    const scrap = async () => {
+        if(!"{{user.username}}"){
+            if (confirm('로그인이 필요합니다. 로그인 창으로 이동할까요?'))
+                window.location = '/registration/login';
+            return;
+        }
+        const response = await axios.post('/book_scrap', {book_pk:"{{book.pk}}"});
+        if (response.data.is_scrap) {
+            document.getElementById('scrap').style.color = 'red';
+        } else {
+            document.getElementById('scrap').style.color = 'black';
+        }
+
+        document.getElementById('scrap-cnt').innerHTML = response.data.scraps_count;
+        
+    }
+</script>
+{% endblock container%}

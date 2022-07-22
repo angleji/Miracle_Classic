@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <div class="input-box">
+            <label for="email">이메일</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div class="input-box">
+            <label for="password">비밀번호</label>
+            <input type="password" name="password" id="password">
+        </div>
+        
+        <button type="button" onclick="checkLogin()">로그인</button>
+        <p id="login-error"></p>
+    </form>
+
+    <a href="{% url 'registration/signup' %}">회원가입</a>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        const checkLogin = async () => {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const response = await axios.post('/registration/login', {email:email, password:password});
+            
+            if (response.data.state) {
+                window.location = '/';
+            } else {
+                document.getElementById('login-error').innerHTML = '알맞지 않은 이메일/비밀번호 입니다';
+            }
+        }
+
+    </script>
+</body>
+</html>

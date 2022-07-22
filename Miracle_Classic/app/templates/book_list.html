@@ -1,0 +1,9 @@
+{% extends 'base.html' %} {% block container %}
+
+{% for book in books %}
+{% include 'book_container.html' %}
+{% endfor %}
+
+
+
+{% endblock container %}

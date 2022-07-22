@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block container %}
+
+<h1>{% block profile_name %}{% endblock profile_name %}</h1>
+
+<div>
+    <button id="scraps" onclick="show('scraps')" >서재</button>
+    <button id="posts" onclick="show('posts')">글</button>
+    <button id="liked_posts" onclick="show('liked_posts')">좋아요</button>
+</div>
+
+<div id="list-container">
+    {% for book in scraps %}
+    {% include 'book_container.html' %}
+    {% endfor %}
+</div>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const show = (category) => {
+        
+        let input_list = `{% for book in scraps %}{% include 'book_container.html' %}{% endfor %}`;
+
+        if (category == 'liked_posts'){
+            input_list = `{% for post in liked_posts %}{% include 'post_container.html' %}{% endfor %}`;
+        } 
+        else if (category == 'posts') {
+            input_list = `{% for post in posts %}{% include 'post_container.html' %}{% endfor %}`;
+        };
+        
+        document.getElementById('list-container').innerHTML = input_list;
+    }
+</script>
+
+{% endblock container %}

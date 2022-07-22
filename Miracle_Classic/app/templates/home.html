@@ -1,0 +1,17 @@
+{% extends 'base.html' %} {% block container %}
+
+<h2>인기 토론글</h2>
+<a href="{% url 'post_list' %}"><button>더보기</button></a>
+{% for post in hot_posts%}
+{% include 'post_container.html' %}
+{% endfor %}
+
+
+<h2>책</h2>
+<a href="{% url 'book_list' %}"><button>더보기</button></a>
+{% for book in books %}
+{% include 'book_container.html' %}
+{% endfor %}
+
+
+{% endblock container%}

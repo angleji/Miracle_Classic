@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>미라클고전</title>
+    
+</head>
+<body>
+
+    <div class="nav-bar">
+        <div class="nav-item">
+            <a href="{% url 'home' %}">
+                <h3>미라클고전</h3>
+            </a>
+        </div>
+        <div class="nav-item">
+            {% if user.is_authenticated %}
+            <a href="{% url 'user_profile' user.username %}">
+                마이페이지
+            </a>
+            <a href="{% url 'registration/logout' %}">
+                로그아웃
+            </a>
+            <a href="{% url 'registration/signout' %}">탈퇴</a>
+            {% else %}
+            <a href="{% url 'registration/login' %}">
+                로그인
+            </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="container">
+        {% block container %}
+        {% endblock container %}
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</body>    
+</html>

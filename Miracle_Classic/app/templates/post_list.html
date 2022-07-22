@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% block container %}
+
+{% for post in posts %}
+{% include 'post_container.html' %}
+{% endfor %}
+
+
+{% endblock container %}
